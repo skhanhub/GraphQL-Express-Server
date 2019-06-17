@@ -18,13 +18,14 @@ export default {
             if(result){
                 throw new Error('User already exists.')
             }
+            console.log(args.userInput.email);
             const hashedPassword = await bcrypt.hash(args.userInput.password, 12)
             const user = new User({
                 email: args.userInput.email,
                 password: hashedPassword,
             });  
             const savedUser = await user.save();
-            return ({email: savedUser.email, password: null});
+            return ({email: savedUser.email, password: null, _id: savedUser.id});
         }
         catch (err){
             console.log({err});

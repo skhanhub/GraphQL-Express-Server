@@ -5,7 +5,6 @@ import configs from '../config';
 
 const app = express();
 const config = configs[app.get('env')];
-console.log(config.SECRECT)
 
 export default (req, res, next) => {
     try{

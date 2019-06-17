@@ -18,7 +18,15 @@ const config = configs[app.get('env')];
 
 app.use(logger('dev'));
 app.use(bodyParser.json());
-
+app.use((req, res, next) => {
+    res.setHeader('Access-Control-Allow-Origin', '*');
+    res.setHeader('Access-Control-Allow-Methods', 'POST, GET, OPTIONS');
+    res.setHeader('Access-Control-Allow-Headers', 'Content-Type, Authorization');
+    if(req.method === 'OPTIONS'){
+        return res.sendStatus(200);
+    }
+    next();
+})
 
 app.use(isAuth);
 app.use('/graphql', expressGraphql({
@@ -27,6 +35,14 @@ app.use('/graphql', expressGraphql({
     graphiql: true,
 }));
 
+// mongoose.connect(
+//     `mongodb://10.126.172.232:27017/${
+//         config.MONGO_DB
+//     }?retryWrites=true&w=majority`,
+//     { useNewUrlParser: true }
+// ).then(() => console.log('Connected to the database')).catch(err => {
+//     console.log(err);
+// })
 mongoose.connect(
     `mongodb+srv://${
         config.MONGO_USER
